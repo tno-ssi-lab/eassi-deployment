@@ -1,0 +1,45 @@
+version: "3.3"
+
+services:
+  db:
+    image: postgres:12
+    environment:
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  backend:
+    build: backend
+    ports:
+      - "3000:3000"
+    environment:
+      - SSI_SERVER_URL
+      - IRMASERVER_URL
+      - DATABASE_URL
+    volumes:
+      - ./backend:/app:cached
+
+  frontend:
+    build: frontend
+    ports:
+      - "8080:8080"
+    environment:
+      - SSI_SERVER_URL
+    volumes:
+      - ./frontend:/app:cached
+
+  irma:
+    build: irma
+    ports:
+      - "8088:8088"
+    environment:
+      - IRMASERVER_URL
+      - IRMASERVER_VERBOSE
+      - IRMASERVER_PRODUCTION
+    volumes:
+      - irma-schemes:/root/.local/share/irma/irma_configuration
+
+volumes:
+  irma-schemes:
+  db-data:

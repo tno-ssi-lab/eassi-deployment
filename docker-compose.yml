@@ -1,0 +1,77 @@
+version: "3.3"
+
+services:
+  db:
+    image: postgres:12
+    environment:
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - internal
+
+  backend:
+    build:
+      context: backend
+      dockerfile: Dockerfile.prod
+    environment:
+      - SSI_SERVER_URL
+      - IRMASERVER_URL
+      - DATABASE_URL
+    depends_on:
+      - db
+    networks:
+      - proxy
+      - internal
+    labels:
+      traefik.enable: true
+      traefik.http.routers.ssi-backend.tls.certresolver: letsencrypt
+      traefik.http.routers.ssi-backend.tls.options: safeTLSOptions@file
+      traefik.http.routers.ssi-backend.middlewares: securityHeaders@file
+      traefik.http.routers.ssi-backend.rule: Host(`service.ssi-lab.sensorlab.tno.nl`) && PathPrefix(`/api`, `/socket.io`)
+
+  frontend:
+    build:
+      context: frontend
+      dockerfile: Dockerfile.prod
+    environment:
+      - SSI_SERVER_URL
+    networks:
+      - proxy
+    labels:
+      traefik.enable: true
+      traefik.http.routers.ssi-frontend-insecure.rule: Host(`service.ssi-lab.sensorlab.tno.nl`)
+      traefik.http.routers.ssi-frontend-insecure.middlewares: redirectToHttps@file,securityHeaders@file
+      traefik.http.routers.ssi-frontend.tls.certresolver: letsencrypt
+      traefik.http.routers.ssi-frontend.tls.options: safeTLSOptions@file
+      traefik.http.routers.ssi-frontend.middlewares: securityHeaders@file
+      traefik.http.routers.ssi-frontend.rule: Host(`service.ssi-lab.sensorlab.tno.nl`)
+
+  irma:
+    build: irma
+    environment:
+      - IRMASERVER_URL
+      - IRMASERVER_VERBOSE
+      - IRMASERVER_PRODUCTION
+    volumes:
+      - irma-schemes:/root/.local/share/irma/irma_configuration
+    networks:
+      - proxy
+    labels:
+      traefik.enable: true
+      traefik.http.routers.ssi-irma-insecure.rule: Host(`irma.ssi-lab.sensorlab.tno.nl`)
+      traefik.http.routers.ssi-irma-insecure.middlewares: redirectToHttps@file,securityHeaders@file
+      traefik.http.routers.ssi-irma.tls.certresolver: letsencrypt
+      traefik.http.routers.ssi-irma.tls.options: safeTLSOptions@file
+      traefik.http.routers.ssi-irma.middlewares: securityHeaders@file
+      traefik.http.routers.ssi-irma.rule: Host(`irma.ssi-lab.sensorlab.tno.nl`)
+
+volumes:
+  irma-schemes:
+  db-data:
+
+networks:
+  internal:
+  proxy:
+    external: true
