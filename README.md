@@ -8,7 +8,9 @@ production.
 1. Clone this repo.
 2. Clone the `backend`, `frontend`, and `irma` repos and place them (with those
    names) in the repo directory.
-3. In production, run
+3. Copy `.env.example` to `.env` and update with desired settings (from `ngrok`
+   for instance)
+4. In production, run
    ```bash
    docker-compose up
    ```
