@@ -30,7 +30,7 @@ services:
       traefik.http.routers.ssi-backend.tls.certresolver: letsencrypt
       traefik.http.routers.ssi-backend.tls.options: safeTLSOptions@file
       traefik.http.routers.ssi-backend.middlewares: securityHeaders@file
-      traefik.http.routers.ssi-backend.rule: Host(`service.ssi-lab.sensorlab.tno.nl`) && PathPrefix(`/api`, `/socket.io`)
+      traefik.http.routers.ssi-backend.rule: (Host(`service.ssi-lab.sensorlab.tno.nl`) || Host(`service.ssi-lab.nl`)) && PathPrefix(`/api`, `/socket.io`)
 
   frontend:
     image: ci.tno.nl/ssi-lab/ssi-service-frontend
@@ -42,13 +42,13 @@ services:
     networks:
       - proxy
     labels:
-      traefik.http.routers.ssi-frontend-insecure.rule: Host(`service.ssi-lab.sensorlab.tno.nl`)
       traefik.enable: "true"
+      traefik.http.routers.ssi-frontend-insecure.rule: Host(`service.ssi-lab.sensorlab.tno.nl`) || Host(`service.ssi-lab.nl`)
       traefik.http.routers.ssi-frontend-insecure.middlewares: redirectToHttps@file,securityHeaders@file
       traefik.http.routers.ssi-frontend.tls.certresolver: letsencrypt
       traefik.http.routers.ssi-frontend.tls.options: safeTLSOptions@file
       traefik.http.routers.ssi-frontend.middlewares: securityHeaders@file
-      traefik.http.routers.ssi-frontend.rule: Host(`service.ssi-lab.sensorlab.tno.nl`)
+      traefik.http.routers.ssi-frontend.rule: Host(`service.ssi-lab.sensorlab.tno.nl`) || Host(`service.ssi-lab.nl`)
 
   irma:
     image: ci.tno.nl/ssi-lab/irma-server
@@ -62,13 +62,13 @@ services:
     networks:
       - proxy
     labels:
-      traefik.http.routers.ssi-irma-insecure.rule: Host(`irma.ssi-lab.sensorlab.tno.nl`)
       traefik.enable: "true"
+      traefik.http.routers.ssi-irma-insecure.rule: Host(`irma.ssi-lab.sensorlab.tno.nl`) || Host(`irma.ssi-lab.nl`)
       traefik.http.routers.ssi-irma-insecure.middlewares: redirectToHttps@file,securityHeaders@file
       traefik.http.routers.ssi-irma.tls.certresolver: letsencrypt
       traefik.http.routers.ssi-irma.tls.options: safeTLSOptions@file
       traefik.http.routers.ssi-irma.middlewares: securityHeaders@file
-      traefik.http.routers.ssi-irma.rule: Host(`irma.ssi-lab.sensorlab.tno.nl`)
+      traefik.http.routers.ssi-irma.rule: Host(`irma.ssi-lab.sensorlab.tno.nl`) || Host(`irma.ssi-lab.nl`)
 
 volumes:
   irma-schemes:
