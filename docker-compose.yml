@@ -26,7 +26,7 @@ services:
       - proxy
       - internal
     labels:
-      traefik.enable: true
+      traefik.enable: "true"
       traefik.http.routers.ssi-backend.tls.certresolver: letsencrypt
       traefik.http.routers.ssi-backend.tls.options: safeTLSOptions@file
       traefik.http.routers.ssi-backend.middlewares: securityHeaders@file
@@ -42,8 +42,8 @@ services:
     networks:
       - proxy
     labels:
-      traefik.enable: true
       traefik.http.routers.ssi-frontend-insecure.rule: Host(`service.ssi-lab.sensorlab.tno.nl`)
+      traefik.enable: "true"
       traefik.http.routers.ssi-frontend-insecure.middlewares: redirectToHttps@file,securityHeaders@file
       traefik.http.routers.ssi-frontend.tls.certresolver: letsencrypt
       traefik.http.routers.ssi-frontend.tls.options: safeTLSOptions@file
@@ -62,8 +62,8 @@ services:
     networks:
       - proxy
     labels:
-      traefik.enable: true
       traefik.http.routers.ssi-irma-insecure.rule: Host(`irma.ssi-lab.sensorlab.tno.nl`)
+      traefik.enable: "true"
       traefik.http.routers.ssi-irma-insecure.middlewares: redirectToHttps@file,securityHeaders@file
       traefik.http.routers.ssi-irma.tls.certresolver: letsencrypt
       traefik.http.routers.ssi-irma.tls.options: safeTLSOptions@file
