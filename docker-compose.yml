@@ -12,6 +12,7 @@ services:
       - internal
 
   backend:
+    image: ci.tno.nl/ssi-lab/ssi-service-backend
     build:
       context: backend
       dockerfile: Dockerfile.prod
@@ -32,6 +33,7 @@ services:
       traefik.http.routers.ssi-backend.rule: Host(`service.ssi-lab.sensorlab.tno.nl`) && PathPrefix(`/api`, `/socket.io`)
 
   frontend:
+    image: ci.tno.nl/ssi-lab/ssi-service-frontend
     build:
       context: frontend
       dockerfile: Dockerfile.prod
@@ -49,6 +51,7 @@ services:
       traefik.http.routers.ssi-frontend.rule: Host(`service.ssi-lab.sensorlab.tno.nl`)
 
   irma:
+    image: ci.tno.nl/ssi-lab/irma-server
     build: irma
     environment:
       - IRMASERVER_URL
