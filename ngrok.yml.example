@@ -1,0 +1,15 @@
+authtoken: XXX
+region: eu
+tunnels:
+  backend:
+    proto: http
+    addr: 3000
+    bind-tls: true
+  frontend:
+    proto: http
+    addr: 8080
+    bind-tls: true
+  irma:
+    proto: http
+    addr: 8088
+    bind-tls: true
