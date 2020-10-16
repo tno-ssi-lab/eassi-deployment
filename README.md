@@ -16,7 +16,7 @@ production.
    ```
    Locally, run
    ```
-   docker-compose up -f docker-compose.dev.yml
+   docker-compose -f docker-compose.dev.yml up
    ```
 
 Database should be set up automatically.
