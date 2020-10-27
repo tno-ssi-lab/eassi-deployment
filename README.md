@@ -20,3 +20,25 @@ production.
    ```
 
 Database should be set up automatically.
+
+## ngrok
+
+To be able to use the service locally from a phone that's not on the network, you 
+need so set up a proxy service. Ngrok is by far the easiest and free. There is an
+example config file included. You still need to register and grab your api key.
+
+After copying the file, you can start ngrok with the following command (skips TCP 
+tunnels):
+
+```bash
+ngrok start -config=ngrok.yml --all
+```
+
+After ngrok has started, you can inspect traffic to your service on http://localhost:4040.
+
+There is a python script included to automatically update your local .env file with
+the new proxy settings:
+
+```bash
+python3 updatetunnels.py
+```
