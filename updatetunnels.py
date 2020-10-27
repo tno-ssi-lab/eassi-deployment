@@ -14,7 +14,6 @@ ENV_FILE = Path("./.env").resolve()
 
 def get_tunnels():
     result = requests.get("http://localhost:4040/api/tunnels").json()
-
     return { tunnel['config']['addr']: tunnel['public_url'] for tunnel in result['tunnels'] }
 
 def update_env(tunnels):
@@ -31,8 +30,6 @@ def update_env(tunnels):
 
     with open(ENV_FILE, 'w') as f:
         f.write(contents)
-
-
 
 
 if __name__ == "__main__":
