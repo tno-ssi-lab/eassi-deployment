@@ -70,9 +70,55 @@ services:
       traefik.http.routers.ssi-irma.middlewares: redirectSsiSensorlab@file,securityHeaders@file
       traefik.http.routers.ssi-irma.rule: Host(`irma.ssi-lab.sensorlab.tno.nl`) || Host(`irma.ssi-lab.nl`)
 
+  acapy:
+    image: ci.tno.nl/ssi-lab/aca-py-server
+    build: acapy
+    # FIXME: Can't figure out how to pass IT setttings using ENV vars
+    command: start --inbound-transport $ACAPY_INBOUND_TRANSPORT
+    networks:
+      - proxy
+      - internal
+    environment:
+      - ACAPY_ENDPOINT
+      - ACAPY_GENESIS_URL
+      - ACAPY_WALLET_SEED
+      - ACAPY_WALLET_KEY
+      - ACAPY_WALLET_NAME
+      - ACAPY_WALLET_TYPE
+      # FIXME: Passed using command above
+      # - ACAPY_INBOUND_TRANSPORT
+      - ACAPY_OUTBOUND_TRANSPORT
+      - ACAPY_ADMIN
+      - ACAPY_ADMIN_INSECURE_MODE
+      - ACAPY_WEBHOOK_URL
+      - ACAPY_DEBUG_CONNECTIONS
+      - ACAPY_DEBUG_CREDENTIALS
+      - ACAPY_AUTO_ACCEPT_INVITES
+      - ACAPY_AUTO_ACCEPT_REQUESTS
+      - ACAPY_AUTO_RESPOND_MESSAGES
+      - ACAPY_AUTO_RESPOND_CREDENTIAL_PROPOSAL
+      - ACAPY_AUTO_RESPOND_CREDENTIAL_OFFER
+      - ACAPY_AUTO_RESPOND_CREDENTIAL_REQUEST
+      - ACAPY_AUTO_RESPOND_PRESENTATION_PROPOSAL
+      - ACAPY_AUTO_RESPOND_PRESENTATION_REQUEST
+      - ACAPY_AUTO_STORE_CREDENTIAL
+      - ACAPY_AUTO_VERIFY_PRESENTATION
+    volumes:
+      # - ./indy-logs:/home/indy/logs
+      - indy-client:/home/indy/.indy_client
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.ssi-acapy-insecure.rule: Host(`acapy.ssi-lab.sensorlab.tno.nl`) || Host(`acapy.ssi-lab.nl`)
+      traefik.http.routers.ssi-acapy-insecure.middlewares: redirectToHttps@file,redirectSsiSensorlab@file,securityHeaders@file
+      traefik.http.routers.ssi-acapy.tls.certresolver: letsencrypt
+      traefik.http.routers.ssi-acapy.tls.options: safeTLSOptions@file
+      traefik.http.routers.ssi-acapy.middlewares: redirectSsiSensorlab@file,securityHeaders@file
+      traefik.http.routers.ssi-acapy.rule: Host(`acapy.ssi-lab.sensorlab.tno.nl`) || Host(`acapy.ssi-lab.nl`)
+
 volumes:
   irma-schemes:
   db-data:
+  indy-client:
 
 networks:
   internal:
