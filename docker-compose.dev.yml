@@ -17,6 +17,8 @@ services:
       - SSI_SERVER_URL
       - IRMASERVER_URL
       - DATABASE_URL
+      - ACAPY_ADMIN_URL
+      - ACAPY_INDY_DID
     volumes:
       - ./backend:/app:cached
 
@@ -75,8 +77,6 @@ services:
     volumes:
       # - ./indy-logs:/home/indy/logs
       - ./indy-client:/home/indy/.indy_client
-
-
 
 volumes:
   irma-schemes:
