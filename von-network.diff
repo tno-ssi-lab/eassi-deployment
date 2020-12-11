@@ -1,0 +1,37 @@
+diff --git a/docker-compose.yml b/docker-compose.yml
+index a845f77..ade9e23 100644
+--- a/docker-compose.yml
++++ b/docker-compose.yml
+@@ -42,13 +42,21 @@ services:
+       - INFO_SITE_URL=${INFO_SITE_URL}
+     networks:
+       - von
+-    ports:
+-      - ${WEB_SERVER_HOST_PORT:-9000}:8000
++      - proxy
+     volumes:
+       - ./config:/home/indy/config
+       - ./server:/home/indy/server
+       - webserver-cli:/home/indy/.indy-cli
+       - webserver-ledger:/home/indy/ledger
++    labels:
++      traefik.enable: "true"
++      traefik.http.routers.ssi-indy-ledger-insecure.rule: Host(`indy-ledger.ssi-lab.sensorlab.tno.nl`) || Host(`indy-ledger.ssi-lab.nl`)
++      traefik.http.routers.ssi-indy-ledger-insecure.middlewares: redirectToHttps@file,redirectSsiSensorlab@file,securityHeaders@file
++      traefik.http.routers.ssi-indy-ledger.tls.certresolver: letsencrypt
++      traefik.http.routers.ssi-indy-ledger.tls.options: safeTLSOptions@file
++      traefik.http.routers.ssi-indy-ledger.middlewares: redirectSsiSensorlab@file,securityHeaders@file
++      traefik.http.routers.ssi-indy-ledger.rule: Host(`indy-ledger.ssi-lab.sensorlab.tno.nl`) || Host(`indy-ledger.ssi-lab.nl`)
++      traefik.http.services.von-webserver-von-network.loadbalancer.server.port: 8000
+ 
+   #
+   # Synchronization test
+@@ -168,6 +176,8 @@ services:
+ 
+ networks:
+   von:
++  proxy:
++    external: true
+ 
+ volumes:
+   client-data:
