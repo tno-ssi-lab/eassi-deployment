@@ -6,7 +6,7 @@ production.
 ## Usage
 
 1. Clone this repo.
-2. Clone the `backend`, `frontend`, and `irma` repos and place them (with those
+2. Clone the `acapy`, `backend`, `frontend`, and `irma` repos and place them (with those
    names) in the repo directory.
 3. Copy `.env.example` to `.env` and update with desired settings (from `ngrok`
    for instance)
@@ -14,9 +14,14 @@ production.
    ```bash
    docker-compose up
    ```
-   Locally, run
+   Locally, run*
    ```
    docker-compose -f docker-compose.dev.yml up
+   ```
+   *Dev deployment assumes local availability of all the node dependencies for `backend` and `frontend`. These can be installed by
+   ```
+   docker-compose -f docker-compose.dev.yml run backend npm install
+   docker-compose -f docker-compose.dev.yml run frontend yarn install
    ```
 
 Database should be set up automatically.
