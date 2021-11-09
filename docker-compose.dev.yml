@@ -46,10 +46,12 @@ services:
     build: acapy
     # FIXME: Can't figure out how to pass IT setttings using ENV vars
     command: start --inbound-transport $ACAPY_INBOUND_TRANSPORT
+    command: start --inbound-transport http 0.0.0.0 9000 --admin 0.0.0.0 9001 --auto-provision
     ports:
       - "9000:9000"
       - "9001:9001"
     environment:
+      - ACAPY_LABEL
       - ACAPY_ENDPOINT
       - ACAPY_GENESIS_URL
       - ACAPY_WALLET_SEED
@@ -59,7 +61,7 @@ services:
       # FIXME: Passed using command above
       # - ACAPY_INBOUND_TRANSPORT
       - ACAPY_OUTBOUND_TRANSPORT
-      - ACAPY_ADMIN
+#      - ACAPY_ADMIN
       - ACAPY_ADMIN_INSECURE_MODE
       - ACAPY_WEBHOOK_URL
       - ACAPY_DEBUG_CONNECTIONS
@@ -76,8 +78,9 @@ services:
       - ACAPY_AUTO_VERIFY_PRESENTATION
     volumes:
       # - ./indy-logs:/home/indy/logs
-      - ./indy-client:/home/indy/.indy_client
+      - indy-client:/home/indy/.indy_client
 
 volumes:
   irma-schemes:
   db-data:
+  indy-client:
