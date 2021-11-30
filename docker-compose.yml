@@ -33,8 +33,8 @@ services:
       traefik.enable: "true"
       traefik.http.routers.ssi-backend.tls.certresolver: letsencrypt
       traefik.http.routers.ssi-backend.tls.options: safeTLSOptions@file
-      traefik.http.routers.ssi-backend.middlewares: redirectSsiSensorlab@file,securityHeaders@file
-      traefik.http.routers.ssi-backend.rule: (Host(`service.ssi-lab.sensorlab.tno.nl`) || Host(`service.ssi-lab.nl`)) && PathPrefix(`/api`, `/socket.io`)
+      traefik.http.routers.ssi-backend.middlewares: securityHeaders@file
+      traefik.http.routers.ssi-backend.rule: Host(`service.ssi-lab.nl`) && PathPrefix(`/api`, `/socket.io`)
 
   frontend:
     image: ci.tno.nl/ssi-lab/ssi-service-frontend
@@ -47,12 +47,12 @@ services:
       - proxy
     labels:
       traefik.enable: "true"
-      traefik.http.routers.ssi-frontend-insecure.rule: Host(`service.ssi-lab.sensorlab.tno.nl`) || Host(`service.ssi-lab.nl`)
-      traefik.http.routers.ssi-frontend-insecure.middlewares: redirectToHttps@file,redirectSsiSensorlab@file,securityHeaders@file
+      traefik.http.routers.ssi-frontend-insecure.rule: Host(`service.ssi-lab.nl`)
+      traefik.http.routers.ssi-frontend-insecure.middlewares: redirectToHttps@file,securityHeaders@file
       traefik.http.routers.ssi-frontend.tls.certresolver: letsencrypt
       traefik.http.routers.ssi-frontend.tls.options: safeTLSOptions@file
-      traefik.http.routers.ssi-frontend.middlewares: redirectSsiSensorlab@file,securityHeaders@file
-      traefik.http.routers.ssi-frontend.rule: Host(`service.ssi-lab.sensorlab.tno.nl`) || Host(`service.ssi-lab.nl`)
+      traefik.http.routers.ssi-frontend.middlewares: securityHeaders@file
+      traefik.http.routers.ssi-frontend.rule: Host(`service.ssi-lab.nl`)
 
   irma:
     image: ci.tno.nl/ssi-lab/irma-server
@@ -67,22 +67,24 @@ services:
       - proxy
     labels:
       traefik.enable: "true"
-      traefik.http.routers.ssi-irma-insecure.rule: Host(`irma.ssi-lab.sensorlab.tno.nl`) || Host(`irma.ssi-lab.nl`)
-      traefik.http.routers.ssi-irma-insecure.middlewares: redirectToHttps@file,redirectSsiSensorlab@file,securityHeaders@file
+      traefik.http.routers.ssi-irma-insecure.rule: Host(`irma.ssi-lab.nl`)
+      traefik.http.routers.ssi-irma-insecure.middlewares: redirectToHttps@file,securityHeaders@file
       traefik.http.routers.ssi-irma.tls.certresolver: letsencrypt
       traefik.http.routers.ssi-irma.tls.options: safeTLSOptions@file
-      traefik.http.routers.ssi-irma.middlewares: redirectSsiSensorlab@file,securityHeaders@file
-      traefik.http.routers.ssi-irma.rule: Host(`irma.ssi-lab.sensorlab.tno.nl`) || Host(`irma.ssi-lab.nl`)
+      traefik.http.routers.ssi-irma.middlewares: securityHeaders@file
+      traefik.http.routers.ssi-irma.rule: Host(`irma.ssi-lab.nl`)
 
   acapy:
     image: ci.tno.nl/ssi-lab/aca-py-server
     build: acapy
     # FIXME: Can't figure out how to pass IT setttings using ENV vars
-    command: start --inbound-transport $ACAPY_INBOUND_TRANSPORT
+    # command: start --inbound-transport $ACAPY_INBOUND_TRANSPORT
+    command: start --inbound-transport http 0.0.0.0 9000 --admin 0.0.0.0 9001 --auto-provision
     networks:
       - proxy
       - internal
     environment:
+      - ACAPY_LABEL
       - ACAPY_ENDPOINT
       - ACAPY_GENESIS_URL
       - ACAPY_WALLET_SEED
@@ -92,7 +94,7 @@ services:
       # FIXME: Passed using command above
       # - ACAPY_INBOUND_TRANSPORT
       - ACAPY_OUTBOUND_TRANSPORT
-      - ACAPY_ADMIN
+      # - ACAPY_ADMIN
       - ACAPY_ADMIN_INSECURE_MODE
       - ACAPY_WEBHOOK_URL
       - ACAPY_DEBUG_CONNECTIONS
@@ -112,12 +114,12 @@ services:
       - indy-client:/home/indy/.indy_client
     labels:
       traefik.enable: "true"
-      traefik.http.routers.ssi-acapy-insecure.rule: Host(`acapy.ssi-lab.sensorlab.tno.nl`) || Host(`acapy.ssi-lab.nl`)
-      traefik.http.routers.ssi-acapy-insecure.middlewares: redirectToHttps@file,redirectSsiSensorlab@file,securityHeaders@file
+      traefik.http.routers.ssi-acapy-insecure.rule: Host(`acapy.ssi-lab.nl`)
+      traefik.http.routers.ssi-acapy-insecure.middlewares: redirectToHttps@file,securityHeaders@file
       traefik.http.routers.ssi-acapy.tls.certresolver: letsencrypt
       traefik.http.routers.ssi-acapy.tls.options: safeTLSOptions@file
-      traefik.http.routers.ssi-acapy.middlewares: redirectSsiSensorlab@file,securityHeaders@file
-      traefik.http.routers.ssi-acapy.rule: Host(`acapy.ssi-lab.sensorlab.tno.nl`) || Host(`acapy.ssi-lab.nl`)
+      traefik.http.routers.ssi-acapy.middlewares: securityHeaders@file
+      traefik.http.routers.ssi-acapy.rule: Host(`acapy.ssi-lab.nl`)
 
 volumes:
   irma-schemes:
