@@ -22,6 +22,8 @@ services:
       - DATABASE_URL
       - ACAPY_ADMIN_URL
       - ACAPY_INDY_DID
+      - TRINSIC_ADMIN_URL
+      - TRINSIC_API_KEY
     depends_on:
       - db
     networks:

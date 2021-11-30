@@ -19,6 +19,8 @@ services:
       - DATABASE_URL
       - ACAPY_ADMIN_URL
       - ACAPY_INDY_DID
+      - TRINSIC_ADMIN_URL
+      - TRINSIC_API_KEY
     volumes:
       - ./backend:/app:cached
 
@@ -45,7 +47,7 @@ services:
   acapy:
     build: acapy
     # FIXME: Can't figure out how to pass IT setttings using ENV vars
-    command: start --inbound-transport $ACAPY_INBOUND_TRANSPORT
+    # command: start --inbound-transport $ACAPY_INBOUND_TRANSPORT
     command: start --inbound-transport http 0.0.0.0 9000 --admin 0.0.0.0 9001 --auto-provision
     ports:
       - "9000:9000"
