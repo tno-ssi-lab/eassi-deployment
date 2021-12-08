@@ -24,6 +24,8 @@ services:
       - ACAPY_INDY_DID
       - TRINSIC_ADMIN_URL
       - TRINSIC_API_KEY
+      - DATAKEEPER_API_URL
+      - DATAKEEPER_API_KEY
     depends_on:
       - db
     networks:
