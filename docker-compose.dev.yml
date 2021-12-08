@@ -23,6 +23,7 @@ services:
       - TRINSIC_API_KEY
       - DATAKEEPER_API_URL
       - DATAKEEPER_API_KEY
+      - DATAKEEPER_ISSUER_DID
     volumes:
       - ./backend:/app:cached
 
