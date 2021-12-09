@@ -2,6 +2,8 @@
 
 import requests
 import re
+import os
+import subprocess
 from pathlib import Path
 
 TUNNELS = {
@@ -16,6 +18,11 @@ ENV_FILE = Path("./.env").resolve()
 def get_tunnels():
     result = requests.get("http://localhost:4040/api/tunnels").json()
     return { tunnel['config']['addr']: tunnel['public_url'] for tunnel in result['tunnels'] }
+
+def get_tunnels_gitpod():
+    return {
+        tunnel: subprocess.run(f"gp url {tunnel[1:]}", shell=True, check=True, capture_output=True, text=True).stdout.strip() for tunnel in TUNNELS.keys()
+    }
 
 def update_env(tunnels):
     updated = 0
@@ -39,5 +46,6 @@ def update_env(tunnels):
 
 
 if __name__ == "__main__":
-    updated = update_env(get_tunnels())
+    tunnels = get_tunnels_gitpod() if "GITPOD_HOST" in os.environ else get_tunnels()
+    updated = update_env(tunnels)
     print(f"Done. Updated {updated} tunnels.")

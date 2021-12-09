@@ -1,0 +1,13 @@
+tasks:
+  - init: |
+      echo 'Cloning repos'
+      git clone https://github.com/tno-ssi-lab/eassi-gateway-backend /workspace/backend &&
+      git clone https://github.com/tno-ssi-lab/eassi-gateway-frontend /workspace/frontend &&
+      git clone https://github.com/tno-ssi-lab/eassi-irma-server /workspace/irma &&
+      git clone https://github.com/tno-ssi-lab/eassi-aca-py-server /workspace/acapy &&
+      echo 'Setting up env' &&
+      cp .env.example .env
+
+    command: |
+      echo 'Updating urls' &&
+      python updatetunnels.py
