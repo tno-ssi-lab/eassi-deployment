@@ -5,9 +5,45 @@ tasks:
       git clone https://github.com/tno-ssi-lab/eassi-gateway-frontend /workspace/frontend &&
       git clone https://github.com/tno-ssi-lab/eassi-irma-server /workspace/irma &&
       git clone https://github.com/tno-ssi-lab/eassi-aca-py-server /workspace/acapy &&
+      ln -s ../acapy && ln -s ../backend && ln -s ../frontend && ln -s ../irma &&
       echo 'Setting up env' &&
-      cp .env.example .env
+      cp .env.example .env &&
+      echo 'Building images' &&
+      docker-compose -f docker-compose.dev.yml build &&
+      echo 'Initializing'
+      docker-compose -f docker-compose.dev.yml run backend npm i &&
+      docker-compose -f docker-compose.dev.yml run backend npm run typeorm:run &&
+      docker-compose -f docker-compose.dev.yml run frotnend yarn
 
     command: |
+      echo 'Updating repos' &&
+      cd /workspace/acapy && git pull --ff-only &&
+      cd /workspace/backend && git pull --ff-only &&
+      cd /workspace/frontend && git pull --ff-only &&
+      cd /workspace/irma && git pull --ff-only &&
+      cd /workspace/eassi-deployment &&
+      echo 'Updating images'
+      docker-compose build &&
       echo 'Updating urls' &&
       python updatetunnels.py
+
+ports:
+  - port: 3000
+    onOpen: ignore
+  - port: 8080
+    onOpen: open-browser
+    visibility: public
+  - port: 8088
+    onOpen: ignore
+    visibility: public
+  - port: 9000
+    onOpen: ignore
+    visibility: public
+  - port: 9001
+    onOpen: ignore
+
+vscode:
+  extensions:
+    - ms-azuretools.vscode-docker
+    - octref.vetur
+    - esbenp.prettier-vscode

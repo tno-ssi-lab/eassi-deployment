@@ -10,6 +10,7 @@ services:
       - db-data:/var/lib/postgresql/data
 
   backend:
+    user: "0"
     build: backend
     ports:
       - "3000:3000"
@@ -28,6 +29,7 @@ services:
       - ./backend:/app:cached
 
   frontend:
+    user: "0"
     build: frontend
     ports:
       - "8080:8080"
