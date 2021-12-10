@@ -27,6 +27,8 @@ services:
       - DATAKEEPER_ISSUER_DID
     volumes:
       - ./backend:/app:cached
+    depends_on:
+      - db
 
   frontend:
     user: "0"
