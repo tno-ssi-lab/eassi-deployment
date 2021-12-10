@@ -13,7 +13,7 @@ tasks:
       echo 'Initializing'
       docker-compose -f docker-compose.dev.yml run backend npm i &&
       docker-compose -f docker-compose.dev.yml run backend npm run typeorm:run &&
-      docker-compose -f docker-compose.dev.yml run frotnend yarn
+      docker-compose -f docker-compose.dev.yml run frontend yarn
 
     command: |
       echo 'Updating repos' &&
