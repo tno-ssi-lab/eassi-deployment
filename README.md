@@ -6,8 +6,7 @@ production.
 ## Usage
 
 1. Clone this repo.
-2. Clone the `acapy`, `backend`, `frontend`, and `irma` repos and place them (with those
-   names) in the repo directory.
+2. Clone the `eassi-aca-py-server`, `eassi-backend`, `eassi-frontend`, and `eassi-irma-server` repos and place them in this repo's directory with names `acapy`, `backend`, `frontend`, and `irma` respectively.
 3. Copy `.env.example` to `.env` and update with desired settings (from `ngrok`
    for instance)
 4. In production, run
