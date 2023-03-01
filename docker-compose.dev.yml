@@ -37,6 +37,10 @@ services:
       - "8080:8080"
     environment:
       - SSI_SERVER_URL
+      # Only required on current version of Vue
+      # Should be fixed in v5.0.0-beta.7
+      # See https://github.com/vuejs/vue-cli/issues/6770
+      - NODE_OPTIONS=--openssl-legacy-provider
     volumes:
       - ./frontend:/app:cached
 
