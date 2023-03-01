@@ -35,7 +35,7 @@ After copying the file, you can start ngrok with the following command (skips TC
 tunnels):
 
 ```bash
-ngrok start -config=ngrok.yml --all
+ngrok start --config=ngrok.yml --all
 ```
 
 After ngrok has started, you can inspect traffic to your service on http://localhost:4040.
