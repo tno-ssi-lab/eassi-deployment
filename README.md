@@ -12,10 +12,10 @@ production.
    should be required.
 4. Install the dependencies for the backend and frontend modules
    ```
-   docker-compose -f docker-compose.dev.yml run backend npm install
-   docker-compose -f docker-compose.dev.yml run frontend yarn install
+   docker-compose -f docker-compose.dev.yml run backend npm ci
+   docker-compose -f docker-compose.dev.yml run frontend yarn install --frozen-lockfile
    ```
-4. To locally deploy EASSI, run
+5. To locally deploy EASSI, run
    ```
    docker-compose -f docker-compose.dev.yml up
    ```
@@ -32,7 +32,7 @@ To be able to use the service locally from a phone that's not on the network,
 you need so set up a proxy service. Ngrok is by far the easiest and free. Ngrok
 is service to quickly setup a proxy which redirects traffic from a randomly
 generated grok subdomain to your services running on localhost. There is an
-example config file included. 
+example config file included.
 
 1. To get started, first [create an account](https://ngrok.com/)
 2. The dashboard will show you a command to easily add your authentication token
@@ -41,8 +41,8 @@ example config file included.
    ngrok config add-authtoken <token>
    ```
 3. There is a python script included to automatically update your local .env
-   file to work with the proxy. 
-   ```bash 
+   file to work with the proxy.
+   ```bash
    python3 updatetunnels.py
    ```
 4. Copy the ngrok.yml.example file. ngrok only allows you three tunnels per
@@ -51,13 +51,12 @@ example config file included.
    won't be using.
 5. After copying the file, you can start ngrok with the following command (skips
    TCP tunnels):
-    ```bash
-    ngrok start --config=ngrok.yml --all
-    ```
+   ```bash
+   ngrok start --config=ngrok.yml --all
+   ```
 
 After ngrok has started, you can inspect traffic to your service on
 `http://localhost:4040`. Here you also find the URLs under which your services
-are hosted. 
+are hosted.
 Having started ngrok and updated your `.env` file, you can (re)start
 the docker containers.
-

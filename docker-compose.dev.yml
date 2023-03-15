@@ -14,10 +14,13 @@ services:
     build: backend
     ports:
       - "3000:3000"
+      - "9229:9229"
     environment:
       - SSI_SERVER_URL
-      - IRMASERVER_URL
       - DATABASE_URL
+      - JOLOCOM_PROVIDER_URL
+      - JOLOCOM_CONTRACT_ADDRESS
+      - IRMASERVER_URL
       - ACAPY_ADMIN_URL
       - ACAPY_INDY_DID
       - TRINSIC_ADMIN_URL
