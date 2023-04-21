@@ -14,10 +14,13 @@ services:
     build: backend
     ports:
       - "3000:3000"
+      - "9229:9229"
     environment:
       - SSI_SERVER_URL
-      - IRMASERVER_URL
       - DATABASE_URL
+      - JOLOCOM_PROVIDER_URL
+      - JOLOCOM_CONTRACT_ADDRESS
+      - IRMASERVER_URL
       - ACAPY_ADMIN_URL
       - ACAPY_INDY_DID
       - TRINSIC_ADMIN_URL
@@ -37,6 +40,10 @@ services:
       - "8080:8080"
     environment:
       - SSI_SERVER_URL
+      # Only required on current version of Vue
+      # Should be fixed in v5.0.0-beta.7
+      # See https://github.com/vuejs/vue-cli/issues/6770
+      - NODE_OPTIONS=--openssl-legacy-provider
     volumes:
       - ./frontend:/app:cached
 
@@ -48,6 +55,7 @@ services:
       - IRMASERVER_URL
       - IRMASERVER_VERBOSE
       - IRMASERVER_PRODUCTION
+      - IRMASERVER_NO_AUTH
     volumes:
       - irma-schemes:/root/.local/share/irma/irma_configuration
 
